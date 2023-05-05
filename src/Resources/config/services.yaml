@@ -1,0 +1,8 @@
+parameters:
+
+services:
+  stripe_connector:
+    public: true
+    class: Keivan\StripeConnectorBundle\StripeConnector
+    arguments:
+      $apiKey: ''

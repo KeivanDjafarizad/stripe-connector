@@ -1,0 +1,18 @@
+{
+    "name": "keivan/stripe-connector",
+    "type": "symfony-bundle",
+    "require": {
+        "stripe/stripe-php": "^10.12"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Keivan\\StripeConnectorBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Keivan Francesco Djafari Zad"
+        }
+    ]
+}
