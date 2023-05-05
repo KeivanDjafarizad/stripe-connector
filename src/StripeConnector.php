@@ -4,6 +4,7 @@ namespace Keivan\StripeConnectorBundle;
 
 use Keivan\StripeConnectorBundle\DataTransferObject\StripeCustomer;
 use Keivan\StripeConnectorBundle\DataTransferObject\StripePlan;
+use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 
 class StripeConnector
@@ -16,6 +17,14 @@ class StripeConnector
         $this->client = new StripeClient($apiKey);
     }
 
+    /**
+     * Create a new customer
+     *
+     * @param string $company
+     * @param string $email
+     * @return StripeCustomer
+     * @throws ApiErrorException
+     */
     public function createCustomer( string $company, string $email ): StripeCustomer
     {
         $customer = $this->client->customers->create([
@@ -26,6 +35,14 @@ class StripeConnector
         return StripeCustomer::fromStripeCustomer($customer);
     }
 
+    /**
+     * Update a customer
+     *
+     * @param string $customerId
+     * @param string $company
+     * @return void
+     * @throws ApiErrorException
+     */
     public function updateCustomer( string $customerId, string $company ): void
     {
         $this->client->customers->update(
@@ -36,6 +53,12 @@ class StripeConnector
         );
     }
 
+    /**
+     * Get all customers
+     *
+     * @return array<StripeCustomer>
+     * @throws ApiErrorException
+     */
     public function allCustomers(  ): array
     {
         $customers = $this->client->customers->all();
@@ -46,6 +69,12 @@ class StripeConnector
         return $result;
     }
 
+    /**
+     * Get all plans
+     *
+     * @return array<StripePlan>
+     * @throws ApiErrorException
+     */
     public function allPlans(  ): array
     {
         $plans = $this->client->plans->all();
@@ -57,18 +86,36 @@ class StripeConnector
         return $result;
     }
 
+    /**
+     * Get all active plans
+     *
+     * @return array<StripePlan>
+     * @throws ApiErrorException
+     */
     public function activePlans(  ): array
     {
         $plans = $this->allPlans();
         return array_filter($plans, fn($plan) => $plan->active);
     }
 
+    /**
+     * Get all recurring plans
+     *
+     * @return array<StripePlan>
+     * @throws ApiErrorException
+     */
     public function recurringPlans(  ): array
     {
         $plans = $this->allPlans();
         return array_filter($plans, fn($plan) => $plan->type === StripePlan::TYPE_LICENSED);
     }
 
+    /**
+     * Get all active recurring plans
+     *
+     * @return array<StripePlan>
+     * @throws ApiErrorException
+     */
     public function recurringActivePlans(  ): array
     {
         $plans = $this->activePlans();
