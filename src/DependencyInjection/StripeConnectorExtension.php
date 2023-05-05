@@ -22,6 +22,6 @@ class StripeConnectorExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $repo = $container->getDefinition(StripeConnector::class);
-        $repo->replaceArgument('$test', $config['api_key']);
+        $repo->replaceArgument('$apiKey', $config['api_key']);
     }
 }
